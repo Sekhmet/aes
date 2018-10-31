@@ -71,6 +71,6 @@ public class AESTest {
 
     @org.junit.Test
     public void sbox() {
-        assertEquals(0x637c777b, AES.SubBox(0x00010203));
+        assertEquals(0x637c777b, AES.SubWord(0x00010203));
     }
 }

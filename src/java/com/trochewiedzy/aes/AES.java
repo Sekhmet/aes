@@ -80,7 +80,7 @@ public class AES {
             temp = roundKeys[i - 1];
 
             if (i % Nk == 0) {
-                temp = SubBox(RotWord(temp)) ^ ByteBuffer.wrap(new byte[]{(byte) Rcon[i / Nk], 0, 0, 0}).getInt();
+                temp = SubWord(RotWord(temp)) ^ ByteBuffer.wrap(new byte[]{(byte) Rcon[i / Nk], 0, 0, 0}).getInt();
             } else if (Nk > 6 && i % Nk == 4) {
                 // NOTE: 256b only
                 // If Nk = 8 and i-4 is a multiple of Nk,
@@ -89,6 +89,75 @@ public class AES {
 
             roundKeys[i] = temp ^ roundKeys[i - Nk];
         }
+    }
+
+    public void encrypt(int[][] input) {
+        this.state = input;
+
+        this.addRoundKey(0);
+
+        for (int i = 1; i < Nr - 1; i++) {
+            this.subBytes();
+            this.shiftRows();
+            // TODO: MixColumns
+
+            this.addRoundKey(i);
+        }
+
+        this.subBytes();
+        this.shiftRows();
+        this.addRoundKey(Nr - 1);
+    }
+
+    public void addRoundKey(int round) {
+        for (int i = 0; i < Nb; i++) {
+            int key = roundKeys[round * Nb + i];
+
+            state[0][i] ^= (key & 0xFF000000) >>> 24;
+            state[1][i] ^= (key & 0x00FF0000) >>> 16;
+            state[2][i] ^= (key & 0x0000FF00) >>> 8;
+            state[3][i] ^= (key & 0x000000FF);
+        }
+    }
+
+    public void subBytes() {
+        for (int i = 0; i < Nb; i++) {
+            for (int j = 0; j < Nb; j++) {
+                state[i][j] = S[state[i][j]];
+            }
+        }
+    }
+
+    public void shiftRows() {
+        int a0 = state[1][0];
+        int a1 = state[1][1];
+        int a2 = state[1][2];
+        int a3 = state[1][3];
+
+        state[1][0] = a1;
+        state[1][1] = a2;
+        state[1][2] = a3;
+        state[1][3] = a0;
+
+        a0 = state[2][0];
+        a1 = state[2][1];
+        a2 = state[2][2];
+        a3 = state[2][3];
+
+        state[2][0] = a2;
+        state[2][1] = a3;
+        state[2][2] = a0;
+        state[2][3] = a1;
+
+        a0 = state[3][0];
+        a1 = state[3][1];
+        a2 = state[3][2];
+        a3 = state[3][3];
+
+        state[3][0] = a3;
+        state[3][1] = a0;
+        state[3][2] = a1;
+        state[3][3] = a2;
     }
 
     public static int RotWord(int input) {
@@ -100,7 +169,7 @@ public class AES {
         return ByteBuffer.wrap(new byte[]{a1, a2, a3, a0}).getInt();
     }
 
-    public static int SubBox(int input) {
+    public static int SubWord(int input) {
         int a0 = (input & 0xFF000000) >>> 24;
         int a1 = (input & 0x00FF0000) >>> 16;
         int a2 = (input & 0x0000FF00) >>> 8;
