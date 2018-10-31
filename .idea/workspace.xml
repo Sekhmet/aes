@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2cf37b13-5a48-49dc-9b47-3ab2fc18557d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/com/trochewiedzy/aes/AES.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/com/trochewiedzy/aes/AES.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/com/trochewiedzy/aes/AESTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/com/trochewiedzy/aes/AESTest.java" afterDir="false" />
     </list>
@@ -28,7 +27,7 @@
           <entry key="class" value="1" />
           <entry key="gitignore" value="1" />
           <entry key="iml" value="1" />
-          <entry key="java" value="4" />
+          <entry key="java" value="6" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
@@ -36,7 +35,7 @@
         <counts>
           <entry key="CLASS" value="1" />
           <entry key="IDEA_MODULE" value="1" />
-          <entry key="JAVA" value="4" />
+          <entry key="JAVA" value="6" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="XML" value="1" />
         </counts>
@@ -45,13 +44,13 @@
         <counts>
           <entry key="gitignore" value="3" />
           <entry key="iml" value="19" />
-          <entry key="java" value="3891" />
+          <entry key="java" value="5425" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="IDEA_MODULE" value="19" />
-          <entry key="JAVA" value="3891" />
+          <entry key="JAVA" value="5425" />
           <entry key="PLAIN_TEXT" value="3" />
         </counts>
       </usages-collector>
@@ -62,17 +61,30 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java/com/trochewiedzy/aes/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="46" selection-start-line="46" selection-end-line="46" />
+            <state relative-caret-position="-5">
+              <caret line="26" column="30" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/com/trochewiedzy/aes/AESTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="66" column="32" selection-start-line="66" selection-start-column="32" selection-end-line="66" selection-end-column="32" />
+              <folding>
+                <element signature="e#3279#3280#0" expanded="true" />
+                <element signature="e#3344#3345#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java/com/trochewiedzy/aes/AES.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-175">
-              <caret line="117" column="28" selection-start-line="117" selection-start-column="28" selection-end-line="117" selection-end-column="28" />
+            <state relative-caret-position="315">
+              <caret line="140" column="29" lean-forward="true" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -101,9 +113,9 @@
         <option value="$PROJECT_DIR$/aes.iml" />
         <option value="$PROJECT_DIR$/src/test/AESTest.java" />
         <option value="$PROJECT_DIR$/src/java/com/trochewiedzy/aes/App.java" />
-        <option value="$PROJECT_DIR$/src/test/com/trochewiedzy/aes/AESTest.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/java/com/trochewiedzy/aes/AES.java" />
+        <option value="$PROJECT_DIR$/src/test/com/trochewiedzy/aes/AESTest.java" />
       </list>
     </option>
   </component>
@@ -114,10 +126,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="613" />
-    <option name="y" value="79" />
-    <option name="width" value="1392" />
-    <option name="height" value="1001" />
+    <option name="y" value="30" />
+    <option name="width" value="956" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -174,6 +185,13 @@
             </path>
             <path>
               <item name="aes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="aes" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="aes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="aes" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
@@ -187,9 +205,10 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///home/sekhmet/Workspace/szkola/aes/src/test/com/trochewiedzy/aes/AESTest.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540909399206" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541022583120" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Arquillian JUnit4" value="" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
@@ -228,7 +247,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.App">
+  <component name="RunManager" selected="JUnit.AESTest">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.trochewiedzy.aes.App" />
       <module name="aes" />
@@ -279,8 +298,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.App" />
         <item itemvalue="JUnit.AESTest" />
+        <item itemvalue="Application.App" />
         <item itemvalue="JUnit.AESTest.rotWord" />
       </list>
     </recent_temporary>
@@ -298,50 +317,50 @@
       <workItem from="1540841791094" duration="9006000" />
       <workItem from="1540899985737" duration="574000" />
       <workItem from="1540906748075" duration="3252000" />
-      <workItem from="1541010041733" duration="1833000" />
+      <workItem from="1541010041733" duration="6585000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="AESTest - 2018.10.30 at 14h 46m 07s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 42m 04s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 48m 11s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 42m 12s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 48m 24s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 42m 16s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 49m 55s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 42m 38s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 50m 09s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 43m 04s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 50m 20s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 43m 14s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 51m 35s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 43m 23s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 54m 15s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 43m 28s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 55m 20s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 44m 13s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AESTest - 2018.10.30 at 14h 55m 25s.xml">
+    <history-entry file="AESTest - 2018.10.31 at 22h 45m 10s.xml">
       <configuration name="AESTest" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14665000" />
+    <option name="totallyTimeSpent" value="19417000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="30" width="1920" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25908118" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.53414094" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -350,16 +369,16 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32967034" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3554817" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3548035" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32969433" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.32890365" />
+      <window_info active="true" anchor="bottom" id="Messages" order="11" visible="true" weight="0.3286026" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -430,28 +449,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/com/trochewiedzy/aes/AESTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-120">
-          <caret line="19" column="47" selection-start-line="19" selection-start-column="47" selection-end-line="19" selection-end-column="47" />
-          <folding>
-            <element signature="e#306#307#0" expanded="true" />
-            <element signature="e#370#371#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/java/com/trochewiedzy/aes/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
+        <state relative-caret-position="-5">
+          <caret line="26" column="30" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java/com/trochewiedzy/aes/AES.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-175">
-          <caret line="117" column="28" selection-start-line="117" selection-start-column="28" selection-end-line="117" selection-end-column="28" />
+        <state relative-caret-position="315">
+          <caret line="140" column="29" lean-forward="true" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/com/trochewiedzy/aes/AESTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="66" column="32" selection-start-line="66" selection-start-column="32" selection-end-line="66" selection-end-column="32" />
+          <folding>
+            <element signature="e#3279#3280#0" expanded="true" />
+            <element signature="e#3344#3345#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
