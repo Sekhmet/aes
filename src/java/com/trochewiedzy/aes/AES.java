@@ -3,9 +3,9 @@ package com.trochewiedzy.aes;
 import java.nio.ByteBuffer;
 
 public class AES {
-    public static final int Nb = 4;
-    public static final int Nk = 4;
-    public static final int Nr = 10;
+    public enum Type {
+        KEY_128, KEY_192, KEY_256
+    };
 
     public static final int[] S = new int[]{
             0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
@@ -93,23 +93,46 @@ public class AES {
     };
 
 
-    private int[][] state = new int[4][4];
-    private int[][] key = new int[4][4];
+    public int Nb = 4;
+    public int Nk = 4;
+    public int Nr = 10;
 
-    private int[] roundKeys = new int[Nb * (Nr + 1)];
+    private int[][] state;
+    private int[][] key;
+
+    private int[] roundKeys;
 
     public int[] getRoundKeys() {
         return roundKeys;
     }
 
-    public AES(int[][] key) {
+    public AES(Type type, int[][] key) {
+        switch (type) {
+            case KEY_128:
+                this.Nk = 4;
+                this.Nr = 10;
+                break;
+            case KEY_192:
+                this.Nk = 6;
+                this.Nr = 12;
+                break;
+            case KEY_256:
+                this.Nk = 8;
+                this.Nr = 14;
+                break;
+        }
+
+        this.state = new int[4][4];
+        this.key = new int[Nb][Nk];
+        this.roundKeys = new int[Nb * (Nr + 1)];
+
         this.key = key;
 
         expandKey();
     }
 
     private void expandKey() {
-        int temp = 0;
+        int temp;
 
         for (int i = 0; i < Nk; i++) {
             roundKeys[i] = (key[0][i] << 24) | (key[1][i] << 16) | (key[2][i] << 8) | (key[3][i]);
@@ -121,9 +144,7 @@ public class AES {
             if (i % Nk == 0) {
                 temp = SubWord(RotWord(temp)) ^ ByteBuffer.wrap(new byte[]{(byte) Rcon[i / Nk], 0, 0, 0}).getInt();
             } else if (Nk > 6 && i % Nk == 4) {
-                // NOTE: 256b only
-                // If Nk = 8 and i-4 is a multiple of Nk,
-                // then SubWord() is applied to roundKeys[[ i-1]] prior to the XOR.
+                temp = SubWord(temp);
             }
 
             roundKeys[i] = temp ^ roundKeys[i - Nk];
@@ -136,7 +157,6 @@ public class AES {
         this.addRoundKey(0);
 
         for (int i = 1; i < Nr; i++) {
-            System.out.println(i);
             this.subBytes();
             this.shiftRows();
             this.mixColumns();
