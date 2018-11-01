@@ -1,4 +1,6 @@
-package com.trochewiedzy.aes;
+package com.trochewiedzy.aes.crypto;
+
+import com.trochewiedzy.aes.crypto.AES;
 
 import static org.junit.Assert.*;
 
