@@ -207,6 +207,16 @@ public class AES {
         expandKey();
     }
 
+    public int[][] cloneState() {
+        int[][] clone = new int[state.length][];
+
+        for (int i = 0; i < state.length; i++) {
+            clone[i] = state[i].clone();
+        }
+
+        return clone;
+    }
+
     private void expandKey() {
         int temp;
 
@@ -298,75 +308,29 @@ public class AES {
     }
 
     public void shiftRows() {
-        int a0 = state[1][0];
-        int a1 = state[1][1];
-        int a2 = state[1][2];
-        int a3 = state[1][3];
+        int[][] org = this.cloneState();
 
-        state[1][0] = a1;
-        state[1][1] = a2;
-        state[1][2] = a3;
-        state[1][3] = a0;
-
-        a0 = state[2][0];
-        a1 = state[2][1];
-        a2 = state[2][2];
-        a3 = state[2][3];
-
-        state[2][0] = a2;
-        state[2][1] = a3;
-        state[2][2] = a0;
-        state[2][3] = a1;
-
-        a0 = state[3][0];
-        a1 = state[3][1];
-        a2 = state[3][2];
-        a3 = state[3][3];
-
-        state[3][0] = a3;
-        state[3][1] = a0;
-        state[3][2] = a1;
-        state[3][3] = a2;
+        for (int i = 1; i < state.length; i++) {
+            state[i][0] = org[i][i % state.length];
+            state[i][1] = org[i][(i + 1) % state.length];
+            state[i][2] = org[i][(i + 2) % state.length];
+            state[i][3] = org[i][(i + 3) % state.length];
+        }
     }
 
     public void invShiftRows() {
-        int a0 = state[1][0];
-        int a1 = state[1][1];
-        int a2 = state[1][2];
-        int a3 = state[1][3];
+        int[][] org = this.cloneState();
 
-        state[1][0] = a3;
-        state[1][1] = a0;
-        state[1][2] = a1;
-        state[1][3] = a2;
-
-        a0 = state[2][0];
-        a1 = state[2][1];
-        a2 = state[2][2];
-        a3 = state[2][3];
-
-        state[2][0] = a2;
-        state[2][1] = a3;
-        state[2][2] = a0;
-        state[2][3] = a1;
-
-        a0 = state[3][0];
-        a1 = state[3][1];
-        a2 = state[3][2];
-        a3 = state[3][3];
-
-        state[3][0] = a1;
-        state[3][1] = a2;
-        state[3][2] = a3;
-        state[3][3] = a0;
+        for (int i = 1; i < state.length; i++) {
+            state[i][i % state.length] = org[i][0];
+            state[i][(i + 1) % state.length] = org[i][1];
+            state[i][(i + 2) % state.length] = org[i][2];
+            state[i][(i + 3) % state.length] = org[i][3];
+        }
     }
 
     public void mixColumns() {
-        int[][] org = new int[state.length][];
-
-        for (int i = 0; i < state.length; i++) {
-            org[i] = state[i].clone();
-        }
+        int[][] org = this.cloneState();
 
         state[0][0] = Mul2[org[0][0]] ^ Mul3[org[1][0]] ^ org[2][0] ^ org[3][0];
         state[1][0] = org[0][0] ^ Mul2[org[1][0]] ^ Mul3[org[2][0]] ^ org[3][0];
@@ -390,11 +354,7 @@ public class AES {
     }
 
     public void invMixColumns() {
-        int[][] org = new int[state.length][];
-
-        for (int i = 0; i < state.length; i++) {
-            org[i] = state[i].clone();
-        }
+        int[][] org = this.cloneState();
 
         state[0][0] = Mul14[org[0][0]] ^ Mul11[org[1][0]] ^ Mul13[org[2][0]] ^ Mul9[org[3][0]];
         state[1][0] = Mul9[org[0][0]] ^ Mul14[org[1][0]] ^ Mul11[org[2][0]] ^ Mul13[org[3][0]];
