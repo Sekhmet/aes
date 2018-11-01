@@ -242,6 +242,82 @@ public class AESTest {
     }
 
     @org.junit.Test
+    public void encryption256b() {
+        int[][] key = new int[][]{
+                {0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, 0x18, 0x1c},
+                {0x01, 0x05, 0x09, 0x0d, 0x11, 0x15, 0x19, 0x1d},
+                {0x02, 0x06, 0x0a, 0x0e, 0x12, 0x16, 0x1a, 0x1e},
+                {0x03, 0x07, 0x0b, 0x0f, 0x13, 0x17, 0x1b, 0x1f},
+        };
+
+        int[][] input = new int[][]{
+                {0x00, 0x44, 0x88, 0xcc},
+                {0x11, 0x55, 0x99, 0xdd},
+                {0x22, 0x66, 0xaa, 0xee},
+                {0x33, 0x77, 0xbb, 0xff}
+        };
+
+        AES aes = new AES(AES.Type.KEY_256, key);
+
+        int[][] out = aes.encrypt(input);
+
+        assertEquals(0x8e, out[0][0]);
+        assertEquals(0xa2, out[1][0]);
+        assertEquals(0xb7, out[2][0]);
+        assertEquals(0xca, out[3][0]);
+        assertEquals(0x51, out[0][1]);
+        assertEquals(0x67, out[1][1]);
+        assertEquals(0x45, out[2][1]);
+        assertEquals(0xbf, out[3][1]);
+        assertEquals(0xea, out[0][2]);
+        assertEquals(0xfc, out[1][2]);
+        assertEquals(0x49, out[2][2]);
+        assertEquals(0x90, out[3][2]);
+        assertEquals(0x4b, out[0][3]);
+        assertEquals(0x49, out[1][3]);
+        assertEquals(0x60, out[2][3]);
+        assertEquals(0x89, out[3][3]);
+    }
+
+    @org.junit.Test
+    public void encryption192b() {
+        int[][] key = new int[][]{
+                {0x00, 0x04, 0x08, 0x0c, 0x10, 0x14},
+                {0x01, 0x05, 0x09, 0x0d, 0x11, 0x15},
+                {0x02, 0x06, 0x0a, 0x0e, 0x12, 0x16},
+                {0x03, 0x07, 0x0b, 0x0f, 0x13, 0x17},
+        };
+
+        int[][] input = new int[][]{
+                {0x00, 0x44, 0x88, 0xcc},
+                {0x11, 0x55, 0x99, 0xdd},
+                {0x22, 0x66, 0xaa, 0xee},
+                {0x33, 0x77, 0xbb, 0xff}
+        };
+
+        AES aes = new AES(AES.Type.KEY_192, key);
+
+        int[][] out = aes.encrypt(input);
+
+        assertEquals(0xdd, out[0][0]);
+        assertEquals(0xa9, out[1][0]);
+        assertEquals(0x7c, out[2][0]);
+        assertEquals(0xa4, out[3][0]);
+        assertEquals(0x86, out[0][1]);
+        assertEquals(0x4c, out[1][1]);
+        assertEquals(0xdf, out[2][1]);
+        assertEquals(0xe0, out[3][1]);
+        assertEquals(0x6e, out[0][2]);
+        assertEquals(0xaf, out[1][2]);
+        assertEquals(0x70, out[2][2]);
+        assertEquals(0xa0, out[3][2]);
+        assertEquals(0xec, out[0][3]);
+        assertEquals(0x0d, out[1][3]);
+        assertEquals(0x71, out[2][3]);
+        assertEquals(0x91, out[3][3]);
+    }
+
+    @org.junit.Test
     public void rotWord() {
         assertEquals(0xbbccddaa, AES.RotWord(0xaabbccdd));
         assertEquals(0x03020aaf, AES.RotWord(0xaf03020a));
