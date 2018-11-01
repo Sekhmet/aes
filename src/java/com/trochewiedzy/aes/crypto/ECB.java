@@ -76,9 +76,11 @@ public class ECB {
     }
 
     public int[] decrypt(int[] input) {
-        int[] output = new int[input.length];
+        int blockCount = getBlockCount(input);
 
-        for (int b = 0; b < getBlockCount(input); b++) {
+        int[] output = new int[blockCount * BLOCK_SIZE];
+
+        for (int b = 0; b < blockCount; b++) {
             int[][] slice = new int[4][4];
 
             for (int i = 0; i < N; i++) {

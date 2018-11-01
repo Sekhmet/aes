@@ -6,6 +6,8 @@ import com.trochewiedzy.aes.crypto.ECB;
 import javax.swing.*;
 import javax.xml.bind.DatatypeConverter;
 import java.awt.*;
+import java.io.File;
+import java.nio.file.Files;
 
 public class App {
     private JPanel mainPanel;
@@ -29,31 +31,41 @@ public class App {
 
     // File encryption components
     private JButton loadPlaintextFileButton;
-    private JButton loadEncryptionKeyFileButton;
+    private JTextArea encryptFileKeyTextArea;
     private JButton encryptAndSaveOutputButton;
 
     // File decryption components
     private JButton loadCiphertextFileButton;
-    private JButton loadDecryptionKeyFileButton;
+    private JTextArea decryptFileKeyTextArea;
     private JButton decryptAndSaveOutputButton;
+
+    private int[] encryptionInput;
+    private int[] decryptionInput;
 
     public App() {
         encryptTextButton.addActionListener(e -> encryptPlaintext());
         decryptTextButton.addActionListener(e -> decryptPlaintext());
 
-        loadPlaintextFileButton.addActionListener(e -> fc.showOpenDialog(null));
-        loadEncryptionKeyFileButton.addActionListener(e -> fc.showOpenDialog(null));
-        encryptAndSaveOutputButton.addActionListener(e -> fc.showSaveDialog(null));
+        loadPlaintextFileButton.addActionListener(e -> loadPlaintext());
+        encryptAndSaveOutputButton.addActionListener(e -> encryptFile());
 
-        loadCiphertextFileButton.addActionListener(e -> fc.showOpenDialog(null));
-        loadDecryptionKeyFileButton.addActionListener(e -> fc.showOpenDialog(null));
-        decryptAndSaveOutputButton.addActionListener(e -> fc.showSaveDialog(null));
+        loadCiphertextFileButton.addActionListener(e -> loadCiphertext());
+        decryptAndSaveOutputButton.addActionListener(e -> decryptFile());
     }
 
     private void encryptPlaintext() {
+        String plaintextText = encryptPlaintextTextArea.getText();
+        String keyText = encryptKeyTextArea.getText();
+
         try {
-            byte[] inputBytes = encryptPlaintextTextArea.getText().getBytes();
-            byte[] keyBytes = encryptKeyTextArea.getText().getBytes();
+            if (plaintextText.length() == 0) {
+                throw new Exception("Plaintext can't be empty.");
+            } else if (keyText.length() == 0) {
+                throw new Exception("Key can't be empty.");
+            }
+
+            byte[] inputBytes = plaintextText.getBytes();
+            byte[] keyBytes = keyText.getBytes();
 
             int[] input = new int[inputBytes.length];
             int[] key = new int[keyBytes.length];
@@ -83,9 +95,18 @@ public class App {
     }
 
     private void decryptPlaintext() {
+        String ciphertextText = decryptCiphertextTextArea.getText();
+        String keyText = decryptKeyTextArea.getText();
+
         try {
-            byte[] inputBytes = DatatypeConverter.parseHexBinary(decryptCiphertextTextArea.getText());
-            byte[] keyBytes = encryptKeyTextArea.getText().getBytes();
+            if (ciphertextText.length() == 0) {
+                throw new Exception("Ciphertext can't be empty.");
+            } else if (keyText.length() == 0) {
+                throw new Exception("Key can't be empty.");
+            }
+
+            byte[] inputBytes = DatatypeConverter.parseHexBinary(ciphertextText);
+            byte[] keyBytes = keyText.getBytes();
 
             int[] input = new int[inputBytes.length];
             int[] key = new int[keyBytes.length];
@@ -108,6 +129,124 @@ public class App {
             }
 
             decryptPlaintextTextArea.setText(new String(outputBytes, "UTF-8"));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void loadPlaintext() {
+        try {
+            int result = fc.showOpenDialog(null);
+
+            if (result != JFileChooser.APPROVE_OPTION) return;
+
+            File file = fc.getSelectedFile();
+
+            byte[] inputBytes = Files.readAllBytes(file.toPath());
+
+            encryptionInput = new int[inputBytes.length];
+
+            for (int i = 0; i < encryptionInput.length; i++) {
+                encryptionInput[i] = (int) inputBytes[i] & 0xFF;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void loadCiphertext() {
+        try {
+            int result = fc.showOpenDialog(null);
+
+            if (result != JFileChooser.APPROVE_OPTION) return;
+
+            File file = fc.getSelectedFile();
+
+            byte[] inputBytes = Files.readAllBytes(file.toPath());
+
+            decryptionInput = new int[inputBytes.length];
+
+            for (int i = 0; i < decryptionInput.length; i++) {
+                decryptionInput[i] = (int) inputBytes[i] & 0xFF;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void encryptFile() {
+        String keyText = encryptFileKeyTextArea.getText();
+
+        try {
+            if (encryptionInput == null) {
+                throw new Exception("You need to open input file first.");
+            } else if (keyText.length() == 0) {
+                throw new Exception("Key can't be empty.");
+            }
+
+            int result = fc.showSaveDialog(null);
+
+            if (result != JFileChooser.APPROVE_OPTION) return;
+
+            File file = fc.getSelectedFile();
+
+            byte[] keyBytes = keyText.getBytes();
+
+            int[] key = new int[keyBytes.length];
+
+            for (int i = 0; i < key.length; i++) {
+                key[i] = (int) keyBytes[i] & 0xFF;
+            }
+
+            ECB ecb = new ECB(AES.Type.KEY_128, key);
+
+            int[] output = ecb.encrypt(encryptionInput);
+            byte[] outputBytes = new byte[output.length];
+
+            for (int i = 0; i < outputBytes.length; i++) {
+                outputBytes[i] = (byte) output[i];
+            }
+
+            Files.write(file.toPath(), outputBytes);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private void decryptFile() {
+        String keyText = decryptFileKeyTextArea.getText();
+
+        try {
+            if (decryptionInput == null) {
+                throw new Exception("You need to open input file first.");
+            } else if (keyText.length() == 0) {
+                throw new Exception("Key can't be empty.");
+            }
+
+            int result = fc.showSaveDialog(null);
+
+            if (result != JFileChooser.APPROVE_OPTION) return;
+
+            File file = fc.getSelectedFile();
+
+            byte[] keyBytes = keyText.getBytes();
+
+            int[] key = new int[keyBytes.length];
+
+            for (int i = 0; i < key.length; i++) {
+                key[i] = (int) keyBytes[i] & 0xFF;
+            }
+
+            ECB ecb = new ECB(AES.Type.KEY_128, key);
+
+            int[] output = ecb.decrypt(decryptionInput);
+            byte[] outputBytes = new byte[output.length];
+
+            for (int i = 0; i < outputBytes.length; i++) {
+                outputBytes[i] = (byte) output[i];
+            }
+
+            Files.write(file.toPath(), outputBytes);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
