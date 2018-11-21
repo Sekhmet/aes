@@ -225,7 +225,7 @@ public class AESTest {
 
         int[][] out = aes.encrypt(input);
 
-        assertEquals(new int[][]{
+        assertArrayEquals(new int[][]{
                 {0x39, 0x02, 0xdc, 0x19},
                 {0x25, 0xdc, 0x11, 0x6a},
                 {0x84, 0x09, 0x85, 0x0b},
@@ -291,7 +291,7 @@ public class AESTest {
 
         int[][] out = aes.encrypt(input);
 
-        assertEquals(new int[][]{
+        assertArrayEquals(new int[][]{
                 {0x8e, 0x51, 0xea, 0x4b},
                 {0xa2, 0x67, 0xfc, 0x49},
                 {0xb7, 0x45, 0x49, 0x60},
@@ -320,7 +320,7 @@ public class AESTest {
         int[][] out = aes.decrypt(input);
 
 
-        assertEquals(new int[][]{
+        assertArrayEquals(new int[][]{
                 {0x32, 0x88, 0x31, 0xe0},
                 {0x43, 0x5a, 0x31, 0x37},
                 {0xf6, 0x30, 0x98, 0x07},
@@ -348,7 +348,7 @@ public class AESTest {
 
         int[][] out = aes.decrypt(input);
 
-        assertEquals(new int[][]{
+        assertArrayEquals(new int[][]{
                 {0x00, 0x44, 0x88, 0xcc},
                 {0x11, 0x55, 0x99, 0xdd},
                 {0x22, 0x66, 0xaa, 0xee},
@@ -376,7 +376,7 @@ public class AESTest {
 
         int[][] out = aes.decrypt(input);
 
-        assertEquals(new int[][]{
+        assertArrayEquals(new int[][]{
                 {0x00, 0x44, 0x88, 0xcc},
                 {0x11, 0x55, 0x99, 0xdd},
                 {0x22, 0x66, 0xaa, 0xee},
