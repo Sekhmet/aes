@@ -14,6 +14,8 @@ public class App {
     private JTabbedPane textTabbedPane;
     private JTabbedPane fileTabbedPane;
 
+    private JComboBox versionComboBox;
+
     // Dialogs
     final JFileChooser fc = new JFileChooser();
 
@@ -62,6 +64,8 @@ public class App {
                 throw new Exception("Plaintext can't be empty.");
             } else if (keyText.length() == 0) {
                 throw new Exception("Key can't be empty.");
+            } else if (isTooLong(keyText)) {
+                throw new Exception("Key too long");
             }
 
             byte[] inputBytes = plaintextText.getBytes();
@@ -78,7 +82,22 @@ public class App {
                 key[i] = (int) keyBytes[i] & 0xFF;
             }
 
-            ECB ecb = new ECB(AES.Type.KEY_128, key);
+            ECB ecb;
+            switch (versionComboBox.getModel().getSelectedItem().toString()) {
+                case "AES-128":
+                    ecb = new ECB(AES.Type.KEY_128, key);
+                    break;
+                case "AES-192":
+                    ecb = new ECB(AES.Type.KEY_192, key);
+                    break;
+                case "AES-256":
+                    ecb = new ECB(AES.Type.KEY_256, key);
+                    break;
+                default:
+                    ecb = new ECB(AES.Type.KEY_128, key);
+                    break;
+            }
+
 
             int[] output = ecb.encrypt(input);
 
@@ -103,6 +122,8 @@ public class App {
                 throw new Exception("Ciphertext can't be empty.");
             } else if (keyText.length() == 0) {
                 throw new Exception("Key can't be empty.");
+            } else if (isTooLong(keyText)) {
+                throw new Exception("Key too long");
             }
 
             byte[] inputBytes = DatatypeConverter.parseHexBinary(ciphertextText);
@@ -119,7 +140,21 @@ public class App {
                 key[i] = (int) keyBytes[i] & 0xFF;
             }
 
-            ECB ecb = new ECB(AES.Type.KEY_128, key);
+            ECB ecb;
+            switch (versionComboBox.getModel().getSelectedItem().toString()) {
+                case "AES-128":
+                    ecb = new ECB(AES.Type.KEY_128, key);
+                    break;
+                case "AES-192":
+                    ecb = new ECB(AES.Type.KEY_192, key);
+                    break;
+                case "AES-256":
+                    ecb = new ECB(AES.Type.KEY_256, key);
+                    break;
+                default:
+                    ecb = new ECB(AES.Type.KEY_128, key);
+                    break;
+            }
 
             int[] output = ecb.decrypt(input);
             byte[] outputBytes = new byte[output.length];
@@ -182,6 +217,8 @@ public class App {
                 throw new Exception("You need to open input file first.");
             } else if (keyText.length() == 0) {
                 throw new Exception("Key can't be empty.");
+            } else if (isTooLong(keyText)) {
+                throw new Exception("Key too long");
             }
 
             int result = fc.showSaveDialog(null);
@@ -198,7 +235,21 @@ public class App {
                 key[i] = (int) keyBytes[i] & 0xFF;
             }
 
-            ECB ecb = new ECB(AES.Type.KEY_128, key);
+            ECB ecb;
+            switch (versionComboBox.getModel().getSelectedItem().toString()) {
+                case "AES-128":
+                    ecb = new ECB(AES.Type.KEY_128, key);
+                    break;
+                case "AES-192":
+                    ecb = new ECB(AES.Type.KEY_192, key);
+                    break;
+                case "AES-256":
+                    ecb = new ECB(AES.Type.KEY_256, key);
+                    break;
+                default:
+                    ecb = new ECB(AES.Type.KEY_128, key);
+                    break;
+            }
 
             int[] output = ecb.encrypt(encryptionInput);
             byte[] outputBytes = new byte[output.length];
@@ -221,6 +272,8 @@ public class App {
                 throw new Exception("You need to open input file first.");
             } else if (keyText.length() == 0) {
                 throw new Exception("Key can't be empty.");
+            } else if (isTooLong(keyText)) {
+                throw new Exception("Key too long");
             }
 
             int result = fc.showSaveDialog(null);
@@ -237,7 +290,21 @@ public class App {
                 key[i] = (int) keyBytes[i] & 0xFF;
             }
 
-            ECB ecb = new ECB(AES.Type.KEY_128, key);
+            ECB ecb;
+            switch (versionComboBox.getModel().getSelectedItem().toString()) {
+                case "AES-128":
+                    ecb = new ECB(AES.Type.KEY_128, key);
+                    break;
+                case "AES-192":
+                    ecb = new ECB(AES.Type.KEY_192, key);
+                    break;
+                case "AES-256":
+                    ecb = new ECB(AES.Type.KEY_256, key);
+                    break;
+                default:
+                    ecb = new ECB(AES.Type.KEY_128, key);
+                    break;
+            }
 
             int[] output = ecb.decrypt(decryptionInput);
             byte[] outputBytes = new byte[output.length];
@@ -250,6 +317,27 @@ public class App {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+    }
+
+    private boolean isTooLong(String key) {
+        int columns = 0;
+
+        switch (versionComboBox.getModel().getSelectedItem().toString()) {
+            case "AES-128":
+                columns = 4;
+                break;
+            case "AES-192":
+                columns = 6;
+                break;
+            case "AES-256":
+                columns = 8;
+                break;
+            default:
+                columns = 4;
+                break;
+        }
+
+        return key.getBytes().length > 4 * columns;
     }
 
     public static void main(String[] args) {

@@ -30,7 +30,7 @@ public class ECB {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < Nk; j++) {
                 int curr = i * 4 + j;
-                aesKey[j][i] = curr < key.length ? key[i * 4 + j] : 0;
+                aesKey[i][j] = curr < key.length ? key[i * 4 + j] : 0;
             }
         }
 
