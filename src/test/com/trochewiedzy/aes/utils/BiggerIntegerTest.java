@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class BiggerIntegerTest {
     @org.junit.Test
     public void createsBiggerIntegerCorrecltyFromString() {
-        BiggerInteger a = new BiggerInteger("01234567899");
+        BiggerInteger a = new BiggerInteger("1234567899");
 
         ArrayList<Integer> expected = new ArrayList<>();
         expected.add(9);
@@ -20,19 +20,49 @@ public class BiggerIntegerTest {
         expected.add(3);
         expected.add(2);
         expected.add(1);
-        expected.add(0);
 
         Assert.assertEquals(expected, a.data);
+        Assert.assertFalse(a.negative);
     }
 
     @org.junit.Test
-    public void returnStringRepresentation() {
+    public void createsNegativeBiggerIntegerCorrecltyFromString() {
+        BiggerInteger a = new BiggerInteger("-1234567899");
+
+        ArrayList<Integer> expected = new ArrayList<>();
+        expected.add(9);
+        expected.add(9);
+        expected.add(8);
+        expected.add(7);
+        expected.add(6);
+        expected.add(5);
+        expected.add(4);
+        expected.add(3);
+        expected.add(2);
+        expected.add(1);
+
+        Assert.assertEquals(expected, a.data);
+        Assert.assertTrue(a.negative);
+    }
+
+    @org.junit.Test
+    public void returnsStringRepresentation() {
         String input = "3120321578125782915219051829051820521";
 
         BiggerInteger a = new BiggerInteger(input);
 
         Assert.assertEquals(input, a.toString());
     }
+
+    @org.junit.Test
+    public void returnsNegativeStringRepresentation() {
+        String input = "-3120321578125782915219051829051820521";
+
+        BiggerInteger a = new BiggerInteger(input);
+
+        Assert.assertEquals(input, a.toString());
+    }
+
 
     @org.junit.Test
     public void addsTwoBiggerIntegersWithoutCarry() {
@@ -82,6 +112,16 @@ public class BiggerIntegerTest {
         a.Subtract(b);
 
         Assert.assertEquals("1932802996868", a.toString());
+    }
+
+    @org.junit.Test
+    public void subtractsTwoBiggerIntegersResultingWithNegative() {
+        BiggerInteger a = new BiggerInteger("204166222544");
+        BiggerInteger b = new BiggerInteger("2136969219412");
+
+        a.Subtract(b);
+
+        Assert.assertEquals("-1932802996868", a.toString());
     }
 
     @org.junit.Test

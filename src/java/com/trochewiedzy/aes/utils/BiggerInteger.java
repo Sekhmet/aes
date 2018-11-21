@@ -1,14 +1,18 @@
 package com.trochewiedzy.aes.utils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BiggerInteger {
+    boolean negative = false;
     ArrayList<Integer> data = new ArrayList<>();
 
     BiggerInteger(String input) {
         for (int i = input.length() - 1; i >= 0; i--) {
+            if (i == 0 && input.charAt(i) == '-') {
+                negative = true;
+                return;
+            }
+
             data.add(input.charAt(i) - 48);
         }
     }
@@ -46,12 +50,34 @@ public class BiggerInteger {
     }
 
     BiggerInteger Subtract(BiggerInteger a) {
+        BiggerInteger subtrahend;
+        BiggerInteger minuend;
+
+        switch (Compare(a)) {
+            case 0:
+                data.clear();
+                data.add(0);
+
+                return this;
+            case 1:
+                negative = true;
+                subtrahend = a;
+                minuend = this;
+                break;
+            case -1:
+            default:
+                negative = false;
+                subtrahend = this;
+                minuend = a;
+                break;
+        }
+
         int i = 0;
 
         int carry = 0;
 
         while (i < data.size() || carry != 0) {
-            int res = tryGet(i) - carry - a.tryGet(i);
+            int res = subtrahend.tryGet(i) - carry - minuend.tryGet(i);
 
             carry = 0;
 
@@ -64,6 +90,8 @@ public class BiggerInteger {
 
             i++;
         }
+
+        trim();
 
         return this;
     }
@@ -91,14 +119,33 @@ public class BiggerInteger {
             data.add(result[i]);
         }
 
+        trim();
+
+        return this;
+    }
+
+    int Compare(BiggerInteger a) {
+        if (size() == a.size()) {
+            for (int i = size() - 1; i >= 0; i--) {
+                if (a.tryGet(i) == tryGet(i)) continue;
+
+                return a.tryGet(i) > tryGet(i) ? 1 : -1;
+            }
+
+            return 0;
+        }
+
+        return a.size() > size() ? 1 : -1;
+    }
+
+    void trim() {
         for (int i = size() - 1; i >= 0; i--) {
             if (data.get(i) != 0) break;
 
             data.remove(i);
         }
-
-        return this;
     }
+
 
     int size() {
         return data.size();
@@ -122,6 +169,8 @@ public class BiggerInteger {
 
     public String toString() {
         StringBuilder builder = new StringBuilder();
+
+        if (negative) builder.append('-');
 
         for (int i = data.size() -1; i >= 0; i--) {
             builder.append((char) (data.get(i) + 48));
