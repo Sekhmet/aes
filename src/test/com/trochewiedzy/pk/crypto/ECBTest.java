@@ -1,8 +1,6 @@
-package com.trochewiedzy.aes.crypto;
+package com.trochewiedzy.pk.crypto;
 
 import org.junit.Assert;
-
-import static org.junit.Assert.*;
 
 public class ECBTest {
     @org.junit.Test

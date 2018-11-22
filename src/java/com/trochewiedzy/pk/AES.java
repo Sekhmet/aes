@@ -1,7 +1,6 @@
-package com.trochewiedzy.aes;
+package com.trochewiedzy.pk;
 
-import com.trochewiedzy.aes.crypto.AES;
-import com.trochewiedzy.aes.crypto.ECB;
+import com.trochewiedzy.pk.crypto.ECB;
 
 import javax.swing.*;
 import javax.xml.bind.DatatypeConverter;
@@ -9,7 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.nio.file.Files;
 
-public class App {
+public class AES {
     private JPanel mainPanel;
     private JTabbedPane textTabbedPane;
     private JTabbedPane fileTabbedPane;
@@ -44,7 +43,7 @@ public class App {
     private int[] encryptionInput;
     private int[] decryptionInput;
 
-    public App() {
+    public AES() {
         encryptTextButton.addActionListener(e -> encryptPlaintext());
         decryptTextButton.addActionListener(e -> decryptPlaintext());
 
@@ -85,16 +84,16 @@ public class App {
             ECB ecb;
             switch (versionComboBox.getModel().getSelectedItem().toString()) {
                 case "AES-128":
-                    ecb = new ECB(AES.Type.KEY_128, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_128, key);
                     break;
                 case "AES-192":
-                    ecb = new ECB(AES.Type.KEY_192, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_192, key);
                     break;
                 case "AES-256":
-                    ecb = new ECB(AES.Type.KEY_256, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_256, key);
                     break;
                 default:
-                    ecb = new ECB(AES.Type.KEY_128, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_128, key);
                     break;
             }
 
@@ -143,16 +142,16 @@ public class App {
             ECB ecb;
             switch (versionComboBox.getModel().getSelectedItem().toString()) {
                 case "AES-128":
-                    ecb = new ECB(AES.Type.KEY_128, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_128, key);
                     break;
                 case "AES-192":
-                    ecb = new ECB(AES.Type.KEY_192, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_192, key);
                     break;
                 case "AES-256":
-                    ecb = new ECB(AES.Type.KEY_256, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_256, key);
                     break;
                 default:
-                    ecb = new ECB(AES.Type.KEY_128, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_128, key);
                     break;
             }
 
@@ -238,16 +237,16 @@ public class App {
             ECB ecb;
             switch (versionComboBox.getModel().getSelectedItem().toString()) {
                 case "AES-128":
-                    ecb = new ECB(AES.Type.KEY_128, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_128, key);
                     break;
                 case "AES-192":
-                    ecb = new ECB(AES.Type.KEY_192, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_192, key);
                     break;
                 case "AES-256":
-                    ecb = new ECB(AES.Type.KEY_256, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_256, key);
                     break;
                 default:
-                    ecb = new ECB(AES.Type.KEY_128, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_128, key);
                     break;
             }
 
@@ -293,16 +292,16 @@ public class App {
             ECB ecb;
             switch (versionComboBox.getModel().getSelectedItem().toString()) {
                 case "AES-128":
-                    ecb = new ECB(AES.Type.KEY_128, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_128, key);
                     break;
                 case "AES-192":
-                    ecb = new ECB(AES.Type.KEY_192, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_192, key);
                     break;
                 case "AES-256":
-                    ecb = new ECB(AES.Type.KEY_256, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_256, key);
                     break;
                 default:
-                    ecb = new ECB(AES.Type.KEY_128, key);
+                    ecb = new ECB(com.trochewiedzy.pk.crypto.AES.Type.KEY_128, key);
                     break;
             }
 
@@ -341,7 +340,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        App app = new App();
+        AES app = new AES();
 
         JFrame frame = new JFrame(Constants.APP_NAME);
         frame.setContentPane(app.mainPanel);

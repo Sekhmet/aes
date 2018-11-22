@@ -1,4 +1,4 @@
-package com.trochewiedzy.aes.crypto;
+package com.trochewiedzy.pk.crypto;
 
 public class ECB {
     private static final int N = 4;

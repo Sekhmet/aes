@@ -1,4 +1,4 @@
-package com.trochewiedzy.aes.crypto;
+package com.trochewiedzy.pk.crypto;
 
 import java.nio.ByteBuffer;
 
