@@ -1,19 +1,14 @@
 package com.trochewiedzy.pk;
 
-import com.trochewiedzy.pk.crypto.ECB;
-
 import javax.swing.*;
-import javax.xml.bind.DatatypeConverter;
 import java.awt.*;
 import java.io.File;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.StandardOpenOption;
 import java.security.SecureRandom;
 
-public class ElGamal {
+public class ElGamalApp {
     private JPanel mainPanel;
     private JTabbedPane textTabbedPane;
     private JTabbedPane fileTabbedPane;
@@ -50,7 +45,7 @@ public class ElGamal {
     BigInteger p = BigInteger.probablePrime(1024, sc);
     BigInteger g = new BigInteger("3");
 
-    public ElGamal() {
+    public ElGamalApp() {
         encryptTextButton.addActionListener(e -> encryptPlaintext());
         decryptTextButton.addActionListener(e -> decryptPlaintext());
 
@@ -243,7 +238,7 @@ public class ElGamal {
     }
 
     public static void main(String[] args) {
-        ElGamal app = new ElGamal();
+        ElGamalApp app = new ElGamalApp();
 
         JFrame frame = new JFrame(Constants.APP_NAME);
         frame.setContentPane(app.mainPanel);
