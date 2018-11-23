@@ -1,6 +1,10 @@
 package com.trochewiedzy.pk;
 
+import com.trochewiedzy.pk.crypto2.BigNumber;
+import com.trochewiedzy.pk.crypto2.ElGamal;
+
 import javax.swing.*;
+import javax.xml.bind.DatatypeConverter;
 import java.awt.*;
 import java.io.File;
 import java.math.BigInteger;
@@ -45,6 +49,8 @@ public class ElGamalApp {
     BigInteger p = BigInteger.probablePrime(1024, sc);
     BigInteger g = new BigInteger("3");
 
+    ElGamal elGamal = new ElGamal();
+
     public ElGamalApp() {
         encryptTextButton.addActionListener(e -> encryptPlaintext());
         decryptTextButton.addActionListener(e -> decryptPlaintext());
@@ -69,23 +75,36 @@ public class ElGamalApp {
                 throw new Exception("Key too long");
             }
 
-            // Generate keys
-            BigInteger a = new BigInteger(keyText.getBytes());
+            String key = keyText;
+            String [] keys = key.split(" ");
+            BigNumber[] keyp = new BigNumber[3];
 
-            BigInteger b = g.modPow(a, p);
+            for(int i = 0; i < 3; i++)
+                keyp[i] = new BigNumber(keys[i]);
 
-//        BigInteger[] pubKey = {b, g, p};
-//        BigInteger[] privKey = {a, g, p};
+            String text = plaintextText;
+            int i = 0;
+            BigNumber [] result;
+            BigNumber m;
+            String result2 = "";
+            byte [] bytes;
+            for(int x = 0; x < text.length()%129; x++ )
+                text += '\u0000';
 
-            // Encrypt
-            BigInteger M = new BigInteger(encryptPlaintextTextArea.getText().getBytes());
+            int iteration = text.length() / 129;
+            do {
+                bytes = text.substring(129*i, 129*(i+1)).getBytes();
+                m = new BigNumber(bytes);
+                result = elGamal.encryption(m, keyp);
+                result2 += DatatypeConverter.printHexBinary(result[0].toByteArray());
+                result2 += DatatypeConverter.printHexBinary(result[1].toByteArray());
+                i++;
 
-            BigInteger k = BigInteger.probablePrime(1024, sc);
-            BigInteger c1 = g.modPow(k, p);
-            BigInteger c2 = M.multiply(b.modPow(k, p)).mod(p);
+            }while(i < iteration);
 
-            encryptCiphertextTextArea.setText(c1 + "-" + c2);
+            encryptCiphertextTextArea.setText(result2);
         } catch (Exception e) {
+            System.out.println(e);
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }

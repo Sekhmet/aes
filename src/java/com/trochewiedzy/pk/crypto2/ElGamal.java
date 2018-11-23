@@ -2,9 +2,9 @@ package com.trochewiedzy.pk.crypto2;
 
 import java.util.Random;
 
-public class ElGamel {
+public class ElGamal {
 	
-	public ElGamel() {
+	public ElGamal() {
 		
 	}
 
