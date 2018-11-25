@@ -94,7 +94,7 @@ class Bit {
 
     BigNumber retrieve(BigNumber initValue, int certainty, java.util.Random random) {
         // Examine the sieve one long at a time to find possible primes
-    	Mod mod = new Mod();
+    	ModMath modMath = new ModMath();
         int offset = 1;
         for (int i=0; i<bits.length; i++) {
             long nextLong = ~bits[i];
@@ -102,7 +102,7 @@ class Bit {
                 if ((nextLong & 1) == 1) {
                     BigNumber candidate = initValue.add(
                                            BigNumber.valueOf(offset));
-                    if (mod.primeToCertainty(candidate, certainty, random))
+                    if (modMath.primeToCertainty(candidate, certainty, random))
                         return candidate;
                 }
                 nextLong >>>= 1;

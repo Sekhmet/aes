@@ -342,7 +342,7 @@ public class AES {
     public static void main(String[] args) {
         AES app = new AES();
 
-        JFrame frame = new JFrame(Constants.APP_NAME);
+        JFrame frame = new JFrame(Constants.APP_NAME_AES);
         frame.setContentPane(app.mainPanel);
         frame.setPreferredSize(new Dimension(600, 500));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

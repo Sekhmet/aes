@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public class BigNumber extends Number implements Comparable<BigNumber> {
 
-    final int signum;
+    int signum;
     final int[] mag;
     private int bitCount;
     private int bitLength;
@@ -614,6 +614,8 @@ public class BigNumber extends Number implements Comparable<BigNumber> {
         return this.signum;
     }
 
+    public void setSignum(int signum) { this.signum = signum; }
+
     public BigNumber mod(BigNumber m) {
         if (m.signum <= 0)
             throw new ArithmeticException("BigNumber: modulus not positive");
@@ -1109,7 +1111,7 @@ public class BigNumber extends Number implements Comparable<BigNumber> {
         return signum > val.signum ? 1 : -1;
     }
 
-    final int compareMagnitude(BigNumber val) {
+    public final int compareMagnitude(BigNumber val) {
         int[] m1 = mag;
         int len1 = m1.length;
         int[] m2 = val.mag;

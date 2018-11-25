@@ -9,9 +9,9 @@ import java.util.Random;
 import java.util.Set;
 import java.lang.Object;
 
-public class Mod {
+public class ModMath {
 	
-	public Mod() {
+	public ModMath() {
 		
 	}
 	private BigNumber smallPrime(int bitLength, int certainty, Random rnd) {

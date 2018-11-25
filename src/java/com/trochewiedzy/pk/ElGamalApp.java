@@ -2,56 +2,65 @@ package com.trochewiedzy.pk;
 
 import com.trochewiedzy.pk.crypto2.BigNumber;
 import com.trochewiedzy.pk.crypto2.ElGamal;
+import com.trochewiedzy.pk.utils.KeyPair;
 
 import javax.swing.*;
 import javax.xml.bind.DatatypeConverter;
 import java.awt.*;
 import java.io.File;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.security.SecureRandom;
+import java.util.Arrays;
 
 public class ElGamalApp {
+    private static final int BLOCK_SIZE = 128;
+    private static final int CHUNK_SIZE = 256;
+
     private JPanel mainPanel;
-    private JTabbedPane textTabbedPane;
-    private JTabbedPane fileTabbedPane;
 
     // Dialogs
     final JFileChooser fc = new JFileChooser();
 
+    private JTabbedPane textTabbedPane;
+    private JTabbedPane fileTabbedPane;
+
     // Plaintext encryption components
     private JTextArea encryptPlaintextTextArea;
-    private JTextArea encryptKeyTextArea;
     private JTextArea encryptCiphertextTextArea;
     private JButton encryptTextButton;
 
     // Plaintext decryption components
     private JTextArea decryptCiphertextTextArea;
-    private JTextArea decryptKeyTextArea;
     private JTextArea decryptPlaintextTextArea;
     private JButton decryptTextButton;
 
     // File encryption components
     private JButton loadPlaintextFileButton;
-    private JTextArea encryptFileKeyTextArea;
     private JButton encryptAndSaveOutputButton;
 
     // File decryption components
     private JButton loadCiphertextFileButton;
-    private JTextArea decryptFileKeyTextArea;
     private JButton decryptAndSaveOutputButton;
+
+    private JButton generateNewKeypairButton;
+
+    private JLabel publicP;
+    private JLabel publicG;
+    private JLabel publicB;
+    private JLabel privateP;
+    private JLabel privateG;
+    private JLabel privateA;
 
     private byte[] encryptionInput;
     private byte[] decryptionInput;
 
-    SecureRandom sc = new SecureRandom();
-    BigInteger p = BigInteger.probablePrime(1024, sc);
-    BigInteger g = new BigInteger("3");
-
     ElGamal elGamal = new ElGamal();
+    KeyPair keyPair = new KeyPair();
 
     public ElGamalApp() {
+        generateNewKeypair();
+
+        generateNewKeypairButton.addActionListener(e -> generateNewKeypair());
+
         encryptTextButton.addActionListener(e -> encryptPlaintext());
         decryptTextButton.addActionListener(e -> decryptPlaintext());
 
@@ -62,81 +71,84 @@ public class ElGamalApp {
         decryptAndSaveOutputButton.addActionListener(e -> decryptFile());
     }
 
+    private void generateNewKeypair() {
+        keyPair.generate();
+
+        publicP.setText(formatBigNumber("p", keyPair.getPublicKey().p));
+        publicG.setText(formatBigNumber("g", keyPair.getPublicKey().g));
+        publicB.setText(formatBigNumber("b", keyPair.getPublicKey().b));
+
+        privateP.setText(formatBigNumber("p", keyPair.getPrivateKey().p));
+        privateG.setText(formatBigNumber("g", keyPair.getPrivateKey().g));
+        privateA.setText(formatBigNumber("a", keyPair.getPrivateKey().a));
+    }
+
+    private String formatBigNumber(String name, BigNumber number) {
+        return name + ": " + number.toString().substring(0, 20) + "...";
+    }
+
     private void encryptPlaintext() {
-        String plaintextText = encryptPlaintextTextArea.getText();
-        String keyText = encryptKeyTextArea.getText();
+        String input = encryptPlaintextTextArea.getText();
 
         try {
-            if (plaintextText.length() == 0) {
+            if (input.length() == 0) {
                 throw new Exception("Plaintext can't be empty.");
-            } else if (keyText.length() == 0) {
-                throw new Exception("Key can't be empty.");
-            } else if (isTooLong(keyText)) {
-                throw new Exception("Key too long");
             }
 
-            String key = keyText;
-            String [] keys = key.split(" ");
-            BigNumber[] keyp = new BigNumber[3];
+            BigNumber[] result;
 
-            for(int i = 0; i < 3; i++)
-                keyp[i] = new BigNumber(keys[i]);
+            for (int x = 0; x < input.length() % 128; x++) {
+                input += '\u0000';
+            }
 
-            String text = plaintextText;
-            int i = 0;
-            BigNumber [] result;
-            BigNumber m;
-            String result2 = "";
-            byte [] bytes;
-            for(int x = 0; x < text.length()%129; x++ )
-                text += '\u0000';
+            StringBuilder outputBuilder = new StringBuilder();
 
-            int iteration = text.length() / 129;
-            do {
-                bytes = text.substring(129*i, 129*(i+1)).getBytes();
-                m = new BigNumber(bytes);
-                result = elGamal.encryption(m, keyp);
-                result2 += DatatypeConverter.printHexBinary(result[0].toByteArray());
-                result2 += DatatypeConverter.printHexBinary(result[1].toByteArray());
-                i++;
+            for (int i = 0; i < input.length() / 128; i++) {
+                BigNumber m = new BigNumber(1, input.substring(128 * i, 128 * (i + 1)).getBytes());
+                result = elGamal.encryption(m, keyPair.getPublicKey());
+                outputBuilder.append(DatatypeConverter.printHexBinary(result[0].toByteArray()));
+                outputBuilder.append(DatatypeConverter.printHexBinary(result[1].toByteArray()));
+            }
 
-            }while(i < iteration);
-
-            encryptCiphertextTextArea.setText(result2);
+            encryptCiphertextTextArea.setText(outputBuilder.toString());
         } catch (Exception e) {
-            System.out.println(e);
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
     private void decryptPlaintext() {
-        String ciphertextText = decryptCiphertextTextArea.getText();
-        String keyText = decryptKeyTextArea.getText();
+        String input = decryptCiphertextTextArea.getText();
 
         try {
-            if (ciphertextText.length() == 0) {
+            if (input.length() == 0) {
                 throw new Exception("Ciphertext can't be empty.");
-            } else if (keyText.length() == 0) {
-                throw new Exception("Key can't be empty.");
-            } else if (isTooLong(keyText)) {
-                throw new Exception("Key too long");
             }
 
-            // Generate keys
-            BigInteger a = new BigInteger(keyText.getBytes());
+            String temp;
+            byte[] bytes, bResult;
+            byte[] b = new byte[128];
 
-//        BigInteger[] pubKey = {b, g, p};
-//        BigInteger[] privKey = {a, g, p};
+            String output = "";
 
-            String[] parts = ciphertextText.split("-");
+            BigNumber[] r = new BigNumber[2];
 
-            BigInteger c1 = new BigInteger(parts[0]);
-            BigInteger c2 = new BigInteger(parts[1]);
+            for (int i = 0; i < input.length() / 512; i++) {
+                temp = input.substring(512 * i, 512 * (i + 1));
 
-            // Decrypt
-            BigInteger M = c2.multiply(c1.modPow(a, p).modInverse(p)).mod(p);
+                bytes = DatatypeConverter.parseHexBinary(temp);
+                for (int x = 0; x < 128; x++)
+                    b[x] = bytes[x];
+                r[0] = new BigNumber(b);
+                for (int j = 128, x = 0; x < 128; x++, j++)
+                    b[x] = bytes[j];
+                r[1] = new BigNumber(b);
+                BigNumber result = elGamal.decrypt(r, keyPair.getPrivateKey());
+                bResult = result.toByteArray();
+                String k = new String(bResult);
+                output += k;
+            }
 
-            decryptPlaintextTextArea.setText(new String(M.toByteArray(), StandardCharsets.UTF_8));
+            decryptPlaintextTextArea.setText(output);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -171,95 +183,153 @@ public class ElGamalApp {
     }
 
     private void encryptFile() {
-        String keyText = encryptFileKeyTextArea.getText();
-
         try {
             if (encryptionInput == null) {
                 throw new Exception("You need to open input file first.");
-            } else if (keyText.length() == 0) {
-                throw new Exception("Key can't be empty.");
-            } else if (isTooLong(keyText)) {
-                throw new Exception("Key too long");
             }
 
-            int result = fc.showSaveDialog(null);
+            int dialogResult = fc.showSaveDialog(null);
 
-            if (result != JFileChooser.APPROVE_OPTION) return;
+            if (dialogResult != JFileChooser.APPROVE_OPTION) return;
 
             File file = fc.getSelectedFile();
 
-            // Generate keys
-            BigInteger a = new BigInteger(keyText.getBytes());
+            byte[] padding = {0};
 
-            BigInteger b = g.modPow(a, p);
+            byte paddingCount = encryptionInput.length % BLOCK_SIZE == 0 ? 0 : (byte) (BLOCK_SIZE - (encryptionInput.length % BLOCK_SIZE));
 
-//        BigInteger[] pubKey = {b, g, p};
-//        BigInteger[] privKey = {a, g, p};
+            for (int i = 0; i < paddingCount; i++) {
+                encryptionInput = addToArray(encryptionInput, padding);
+            }
 
-            // Encrypt
-            BigInteger M = new BigInteger(encryptionInput);
+            byte[] splits;
+            byte[] output = new byte[0];
 
-            BigInteger k = BigInteger.probablePrime(1024, sc);
-            BigInteger c1 = g.modPow(k, p);
-            BigInteger c2 = M.multiply(b.modPow(k, p)).mod(p);
+            BigNumber[] result;
 
-            Files.write(file.toPath(), c1.toByteArray());
-//            Files.write(file.toPath(), c2.toByteArray(), StandardOpenOption.APPEND);
+            for (int i = 0; i < encryptionInput.length / BLOCK_SIZE; i++) {
+                splits = split(encryptionInput, BLOCK_SIZE * i, BLOCK_SIZE * (i + 1));
+
+                BigNumber as = new BigNumber(1, splits);
+
+                result = elGamal.encryption(as, keyPair.getPublicKey());
+
+                output = addToArray(output, limit(result[0].toByteArray(), 128));
+                output = addToArray(output, limit(result[1].toByteArray(), 128));
+            }
+
+            output = addToArray(output, new byte[]{ paddingCount });
+
+            Files.write(file.toPath(), output);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
     private void decryptFile() {
-        String keyText = decryptFileKeyTextArea.getText();
-
         try {
             if (decryptionInput == null) {
                 throw new Exception("You need to open input file first.");
-            } else if (keyText.length() == 0) {
-                throw new Exception("Key can't be empty.");
-            } else if (isTooLong(keyText)) {
-                throw new Exception("Key too long");
             }
 
-            int result = fc.showSaveDialog(null);
+            int dialogResult = fc.showSaveDialog(null);
 
-            if (result != JFileChooser.APPROVE_OPTION) return;
+            if (dialogResult != JFileChooser.APPROVE_OPTION) return;
 
             File file = fc.getSelectedFile();
 
-            String ciphertextText = new String(decryptionInput, StandardCharsets.UTF_8);
+            int addBytes = (int) decryptionInput[decryptionInput.length - 1];
+            decryptionInput = remove(decryptionInput, 1);
 
-            // Generate keys
-            BigInteger a = new BigInteger(keyText.getBytes());
+            byte[] splits;
+            byte[] output = new byte[0];
+            BigNumber[] c = new BigNumber[2];
+            BigNumber result;
 
-//        BigInteger[] pubKey = {b, g, p};
-//        BigInteger[] privKey = {a, g, p};
+            for (int i = 0; i < decryptionInput.length / 256; i++) {
+                splits = split(decryptionInput, 256 * i, 256 * (i + 1));
 
-            String[] parts = ciphertextText.split("-");
+                byte[] halves = new byte[128];
 
-            BigInteger c1 = new BigInteger(parts[0]);
-            BigInteger c2 = new BigInteger(parts[1]);
+                for (int x = 0; x < 128; x++) {
+                    halves[x] = splits[x];
+                }
 
-            // Decrypt
-            BigInteger M = c2.multiply(c1.modPow(a, p).modInverse(p)).mod(p);
+                c[0] = new BigNumber(1, halves);
 
+                for (int x = 128, j = 0; j < 128; x++, j++) {
+                    halves[j] = splits[x];
+                }
 
-            Files.write(file.toPath(), M.toByteArray());
+                c[1] = new BigNumber(1, halves);
+
+                result = elGamal.decrypt(c, keyPair.getPrivateKey());
+
+//                System.out.println(result.toByteArray().length);
+
+//                result.setSignum(1);
+
+                byte[] r = limit(result.toByteArray(), 128);
+
+                output = addToArray(output, r);
+            }
+
+            output = remove(output, addBytes);
+
+            Files.write(file.toPath(), output);
         } catch (Exception e) {
-            System.out.println(e);
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
-    private boolean isTooLong(String key) {
-        return key.getBytes().length > 1024;
+    public byte[] limit(byte[] input, int limit) {
+        if (input.length == limit) return input;
+
+        int difference = input.length - limit;
+
+        if (difference > 0) {
+            return Arrays.copyOfRange(input, difference, limit + difference);
+        }
+
+        byte[] result = new byte[limit];
+
+        for (int i = 0; i < limit; i++) {
+            result[i] = i < -difference ? 0 : input[i + difference];
+        }
+
+        return result;
+    }
+
+
+    public byte[] split(byte[] bytes, int b, int e) {
+        byte[] result = new byte[e - b];
+        for (int i = b, x = 0; i < e; i++, x++)
+            result[x] = bytes[i];
+
+        return result;
+    }
+
+    public byte[] addToArray(byte[] a, byte[] b) {
+        byte[] result = new byte[a.length + b.length];
+        for (int i = 0; i < a.length; i++)
+            result[i] = a[i];
+
+        for (int i = a.length, x = 0; x < b.length; i++, x++)
+            result[i] = b[x];
+        return result;
+    }
+
+    public byte[] remove(byte[] a, int count) {
+        byte[] result = new byte[a.length - count];
+        for (int i = 0; i < result.length; i++)
+            result[i] = a[i];
+        return result;
     }
 
     public static void main(String[] args) {
         ElGamalApp app = new ElGamalApp();
 
-        JFrame frame = new JFrame(Constants.APP_NAME);
+        JFrame frame = new JFrame(Constants.APP_NAME_ELGAMAL);
         frame.setContentPane(app.mainPanel);
         frame.setPreferredSize(new Dimension(600, 500));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
